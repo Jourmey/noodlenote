@@ -2,7 +2,9 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"noodlenote/controller"
+	"noodlenote/controller/note"
+	"noodlenote/controller/notebook"
+	"noodlenote/controller/resource"
 )
 
 func NewRouter() *gin.Engine {
@@ -16,16 +18,28 @@ func NewRouter() *gin.Engine {
 		context.Writer.WriteString("Sorry! No Route")
 	})
 
-	FolderRouter(e.Group("/folder"))
-
+	noteBookRouter(e.Group("/notebook"))
+	noteRouter(e.Group("/note"))
+	resourceRouter(e.Group("/resource"))
 	return e
 }
 
-func FolderRouter(g *gin.RouterGroup) {
-	g.GET("/current", controller.GetCurrent)
-	g.GET("/sub_file/:page", controller.GetSubFile)
-	g.GET("/sub_folder", controller.GetSubFolders) //用于编辑文章选择目录时请求
-	g.GET("/update", controller.Update)
-	g.GET("/add", controller.Add)
-	g.GET("/delete", controller.Delete)
+func noteBookRouter(g *gin.RouterGroup) {
+	g.GET("/all", notebookController.All)          //查看用户全部笔记本
+	g.GET("/list", notebookController.List)        //列出笔记本下的笔记
+	g.PUT("/create", notebookController.Create)    //创建笔记本
+	g.DELETE("/delete", notebookController.Delete) //删除笔记本
+}
+func noteRouter(g *gin.RouterGroup) {
+	g.PUT("/create", noteController.Create)    //创建笔记
+	g.GET("/get", noteController.Get)          //查看笔记
+	g.POST("/update", noteController.Update)   //修改笔记
+	g.PUT("/move", noteController.Move)        //移动笔记
+	g.DELETE("/delete", noteController.Delete) //删除笔记
+
+}
+
+func resourceRouter(g *gin.RouterGroup) {
+	g.POST("/upload", resourceController.Upload)    //上传附件或图片
+	g.GET("/download", resourceController.Download) //下载附件/图片/图标
 }
