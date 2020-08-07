@@ -2,10 +2,15 @@ package config
 
 type Config struct {
 	ServerConfig Server
+	AppConfig    App
 }
 
-func Default() Config {
+var Cfg Config
+
+func SetUp() {
 	var config Config
 	config.ServerConfig.DefaultServerConfig()
-	return config
+	config.AppConfig.DefaultAppConfig()
+
+	Cfg = config
 }

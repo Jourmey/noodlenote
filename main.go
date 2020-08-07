@@ -2,12 +2,13 @@ package main
 
 import (
 	"noodlenote/config"
+	"noodlenote/model"
 	"noodlenote/router"
 )
 
 func main() {
-	conf := config.Default()
-	r := router.NewRouter()
+	config.SetUp()
+	model.SetUp()
 
-	r.Run(conf.ServerConfig.Host + ":" + conf.ServerConfig.Port)
+	router.NewRouter().Run(config.Cfg.ServerConfig.Host + ":" + config.Cfg.ServerConfig.Port)
 }
