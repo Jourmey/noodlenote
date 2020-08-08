@@ -26,20 +26,19 @@ func NewRouter() *gin.Engine {
 
 func noteBookRouter(g *gin.RouterGroup) {
 	g.GET("/all", notebookController.All)          //查看用户全部笔记本
-	g.GET("/list", notebookController.List)        //列出笔记本下的笔记
+	g.GET("/list/:id", notebookController.List)    //列出笔记本下的笔记
 	g.PUT("/create", notebookController.Create)    //创建笔记本
 	g.DELETE("/delete", notebookController.Delete) //删除笔记本
 }
 func noteRouter(g *gin.RouterGroup) {
-	g.PUT("/create", noteController.Create)    //创建笔记
-	g.GET("/get", noteController.Get)          //查看笔记
-	g.POST("/update", noteController.Update)   //修改笔记
-	g.PUT("/move", noteController.Move)        //移动笔记
-	g.DELETE("/delete", noteController.Delete) //删除笔记
-
+	g.PUT("/create", noteController.Create)        //创建笔记 ?id=0(非必须) 默认0
+	g.GET("/get/:id", noteController.Get)          //查看笔记
+	g.PUT("/update", noteController.Update)        //修改笔记
+	g.PUT("/move/:id", noteController.Move)        //移动笔记 ?id=0(非必须) 默认0
+	g.DELETE("/delete/:id", noteController.Delete) //删除笔记
 }
 
 func resourceRouter(g *gin.RouterGroup) {
-	g.POST("/upload", resourceController.Upload)    //上传附件或图片
-	g.GET("/download", resourceController.Download) //下载附件/图片/图标
+	g.POST("/upload", resourceController.Upload)        //上传附件或图片
+	g.GET("/download/:id", resourceController.Download) //下载附件/图片/图标
 }

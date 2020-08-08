@@ -12,13 +12,10 @@ func All(c *gin.Context) {
 }
 
 func List(c *gin.Context) {
-
 	bookId := utils.Int64Parse(c.Param("id"))
 	note := new(model.NoteBookLink)
-	note.GetNotesIDByBookID(bookId)
-
-	n := make([]string, 0, 0) //NoteBook.Path
-	c.JSON(utils.SUCCESS, n)
+	noteIds := note.GetNotesIDByBookID(bookId)
+	c.JSON(utils.SUCCESS, noteIds)
 }
 
 //notebook
@@ -28,24 +25,25 @@ func List(c *gin.Context) {
 func Create(c *gin.Context) {
 	book := new(model.NoteBook)
 	err := c.ShouldBind(&book)
-	book.Create()
 	if err != nil {
-		c.JSON(utils.SUCCESS, utils.CreateNoteBookSUCCESS)
+		book.Create()
+		c.JSON(utils.SUCCESS, gin.H{"msg": utils.CreateNoteBookSuccess, "note_book_id": book.ID})
+
 	} else {
-		c.JSON(utils.ERROR, utils.CreateNoteBookERROR)
+		c.JSON(utils.SUCCESS, utils.CreateNoteBookErr)
 	}
 }
 
 func Delete(c *gin.Context) {
 	bookId := utils.Int64Parse(c.Param("id"))
 
-	note := new(model.NoteBookLink)
-	//links := note.GetNotesIDByBookID(bookId)
-	note.DeleteByBookID(bookId)
+	//删笔记本不删关系
+	//note := new(model.NoteBookLink)
+	//note.DeleteByBookID(bookId)
 
 	book := new(model.NoteBook)
 	book.ID = bookId
 	book.Delete()
 
-	c.JSON(utils.SUCCESS, utils.CreateNoteBookSUCCESS)
+	c.JSON(utils.SUCCESS, utils.CreateNoteBookSuccess)
 }
