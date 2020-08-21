@@ -34,11 +34,11 @@ func Update(c *gin.Context) {
 	note := new(model.Note)
 	err := c.ShouldBind(&note)
 	if err != nil {
-		note.Update()
-		c.JSON(utils.SUCCESS, utils.CreateNoteSuccess)
-	} else {
 		c.JSON(utils.SUCCESS, utils.CreateNoteErr)
+		return
 	}
+	note.Update()
+	c.JSON(utils.SUCCESS, utils.CreateNoteSuccess)
 }
 
 func Move(c *gin.Context) {
